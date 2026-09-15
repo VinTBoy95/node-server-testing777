@@ -4,20 +4,34 @@
   <meta charset="UTF-8">
   <title>Echo Test</title>
   <style>
-    body { font-family: sans-serif; background: #111; color: #eee; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+    body { font-family: sans-serif; background: #111; color: #eee; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; gap: 12px; }
     input { padding: 12px; font-size: 16px; width: 300px; border-radius: 6px; border: none; }
+    button { padding: 12px 20px; font-size: 16px; border-radius: 6px; border: none; cursor: pointer; background: #4caf50; color: white; }
+    #status { font-size: 14px; color: #aaa; }
   </style>
 </head>
 <body>
-  <input id="box" placeholder="Type here, check server console..." autocomplete="off">
+  <input id="box" placeholder="Type something..." autocomplete="off">
+  <button id="sendBtn">Send</button>
+  <div id="status"></div>
+
   <script>
     const box = document.getElementById('box');
-    box.addEventListener('input', () => {
-      fetch('/log', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: box.value })
-      });
+    const btn = document.getElementById('sendBtn');
+    const status = document.getElementById('status');
+
+    btn.addEventListener('click', async () => {
+      status.textContent = 'Sending...';
+      try {
+        const res = await fetch('/log', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: box.value })
+        });
+        status.textContent = res.ok ? 'Sent! Check server console.' : `Error: ${res.status}`;
+      } catch (err) {
+        status.textContent = 'Failed: ' + err.message;
+      }
     });
   </script>
 </body>
