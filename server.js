@@ -10,10 +10,8 @@ app.post('/log', (req, res) => {
   res.json({ ok: true });
 });
 
-// IMPORTANT: use the platform's assigned PORT, and bind to 0.0.0.0
-// This is the #1 cause of "Bad Gateway" on hosts like Infrlo/Render/Railway
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
+[3000, 8080, 80, 5000].forEach(port => {
+  const server = require('http').createServer(app);
+  server.listen(port, '0.0.0.0', () => console.log(`Also listening on ${port}`))
+    .on('error', () => {}); // ignore if port unavailable
 });
-console.log('ENV DUMP:', JSON.stringify(process.env, null, 2));
