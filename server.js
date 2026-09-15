@@ -9,7 +9,8 @@ app.post('/log', (req, res) => {
   res.json({ ok: true });
 });
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
+[3000, 8080, 80, 5000].forEach(port => {
+  require('http').createServer(app).listen(port, '0.0.0.0', () => {
+    console.log(`Listening on ${port}`);
+  }).on('error', () => {});
 });
