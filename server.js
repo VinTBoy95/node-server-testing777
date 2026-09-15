@@ -15,3 +15,4 @@ app.post('/log', (req, res) => {
   server.listen(port, '0.0.0.0', () => console.log(`Also listening on ${port}`))
     .on('error', () => {}); // ignore if port unavailable
 });
+console.log('Files in /app:', require('fs').readdirSync('/app'));
